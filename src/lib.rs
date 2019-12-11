@@ -9,6 +9,7 @@ extern crate toml;
 use kagura::prelude::*;
 use wasm_bindgen::prelude::*;
 
+mod editor;
 mod enemy;
 
 use enemy::Enemy;
@@ -22,7 +23,7 @@ struct State {
     enemy: Enemy,
 }
 
-enum Msg {}
+pub enum Msg {}
 
 struct Sub();
 
@@ -45,7 +46,7 @@ fn render(state: &State) -> Html<Msg> {
     Html::div(
         Attributes::new().id("app"),
         Events::new(),
-        vec![render_menu()],
+        vec![render_menu(), editor::render(&state.enemy)],
     )
 }
 

@@ -1,0 +1,9 @@
+#content[data-type="editor"] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    & > input[data-type="name"] {
+        font-size: 1.5rem;
+        flex-grow: 1;
+    }
+}

@@ -1,6 +1,7 @@
 @import "./pure-release-1.0.1/pure-min.css";
 @import "color.scss";
 @import "font.scss";
+@import "editor.scss";
 
 * {
     box-sizing: border-box;
@@ -14,6 +15,7 @@ html {
     color: $black;
     padding: 0;
     margin: 0;
+    font-family: $san-serif;
 }
 
 body {
@@ -27,17 +29,21 @@ body {
     align-items: center;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: $serif;
-    font-style: normal;
-    font-weight: 400;
-}
-
 #app {
     width: 100vw;
     height: 100vh;
     background-color: $white;
     display: flex;
+}
+
+menu {
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    flex-grow: 1;
+    overflow-y: scroll;
 }
 
 @media screen and (orientation: portrait) {
@@ -49,11 +55,18 @@ h1, h2, h3, h4, h5, h6 {
 @media screen and (orientation: landscape) {
     #app {
         flex-direction: row;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
     }
 
     menu {
         width: 20ch;
         border-right: 0.5ch solid $primary;
+    }
+
+    #content {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
     }
 }
 
