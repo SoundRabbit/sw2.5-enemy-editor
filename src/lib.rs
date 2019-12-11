@@ -68,12 +68,30 @@ fn render_menu() -> Html<Msg> {
         Events::new(),
         vec![
             Html::span(
-                Attributes::new().string("data-selected", "true"),
+                Attributes::new()
+                    .class("pure-button")
+                    .class("item")
+                    .string("data-selected", "true"),
                 Events::new(),
                 vec![Html::text("編集")],
             ),
             Html::span(
-                Attributes::new(),
+                Attributes::new().class("pure-button").class("item"),
+                Events::new(),
+                vec![Html::text("プレビュー")],
+            ),
+            Html::span(
+                Attributes::new().class("pure-button").class("item"),
+                Events::new(),
+                vec![Html::text("保存")],
+            ),
+            Html::span(
+                Attributes::new().class("pure-button").class("item"),
+                Events::new(),
+                vec![Html::text("読み込み")],
+            ),
+            Html::span(
+                Attributes::new().class("pure-button").class("item"),
                 Events::new(),
                 vec![Html::text("書き出し")],
             ),

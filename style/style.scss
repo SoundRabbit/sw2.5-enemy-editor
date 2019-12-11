@@ -50,13 +50,13 @@ body {
 menu {
     margin: 0;
     padding: 0;
-    & > * {
+    & > .item {
         padding-left: 4ch;
         padding-top: 0.5em;
         padding-bottom: 0.5em;
-        &:hover{
-            cursor: pointer;
-        }
+        text-align: left;
+        border-radius: 0;
+        background-color: $white;
         &[data-selected="true"]{
             background-color: $primary;
         }
@@ -87,7 +87,7 @@ menu {
         border-right: 0.5ch solid $primary;
         display: grid;
         grid-auto-rows: max-content;
-        & > * {
+        & > .item:not([data-selected="true"]) {
             border-bottom: 0.3ch solid $primary;
         }
     }
