@@ -1,4 +1,5 @@
 //* 魔物
+#[derive(Deserialize)]
 pub struct Enemy {
     //* 名前
     pub name: String,
@@ -37,6 +38,7 @@ pub struct Enemy {
 }
 
 //* 部位
+#[derive(Deserialize)]
 pub struct Part {
     //* 攻撃方法
     pub way_to_attack: String,
@@ -55,6 +57,7 @@ pub struct Part {
 }
 
 //* 戦利品
+#[derive(Deserialize)]
 pub struct Reward {
     //* 出目
     pub dice: String,
