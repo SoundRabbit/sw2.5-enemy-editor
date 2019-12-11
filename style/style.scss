@@ -7,7 +7,7 @@
     box-sizing: border-box;
 }
 
-input:focus {
+textarea:focus, input:focus {
     border-color: $primary !important;
 }
 
@@ -50,10 +50,12 @@ menu {
         padding-left: 4ch;
         padding-top: 0.5em;
         padding-bottom: 0.5em;
-    }
-    & > *[data-selected="true"]{
-        background-color: $primary;
-        color: $white;
+        &:hover{
+            cursor: pointer;
+        }
+        &[data-selected="true"]{
+            background-color: $primary;
+        }
     }
 }
 
@@ -76,10 +78,14 @@ menu {
     }
 
     menu {
-        width: 20ch;
+        min-width: 20ch;
+        max-width: 20ch;
         border-right: 0.5ch solid $primary;
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-auto-rows: max-content;
+        & > * {
+            border-bottom: 0.3ch solid $primary;
+        }
     }
 
     #content {

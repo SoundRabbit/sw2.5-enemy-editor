@@ -1,11 +1,26 @@
 @import "color.scss";
 
 #content[data-type="editor"] {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    & > input[data-type="name"] {
-        font-size: 1.5rem;
-        flex-grow: 1;
+    display: grid;
+    grid-auto-rows: max-content;
+    grid-template-columns: 100%;
+    row-gap: 2ch;
+    & input[data-type="name"] {
+        font-size: 1.2rem;
+        width: 100%;
+    }
+    & > div {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 35ch);
+        column-gap: 4ch;
+        row-gap: 1ch;
+        & > div {
+            display: grid;
+            grid-template-columns: 10ch 1fr;
+            column-gap: 2ch;
+            & > label {
+                text-align: right;
+            }
+        }
     }
 }
