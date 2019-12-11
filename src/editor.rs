@@ -7,12 +7,21 @@ pub fn render(enemy: &Enemy) -> Html<Msg> {
     let mut content = vec![
         render_name(&enemy.name),
         render_level_kind(&enemy.level, &enemy.kind),
+        render_separator("基本情報"),
         render_props(&enemy),
     ];
-    for part in &enemy.parts {
-        content.push(render_part(part));
+    {
+        let mut part_num = 1;
+        for part in &enemy.parts {
+            content.push(render_separator(
+                String::from("部位") + &part_num.to_string(),
+            ));
+            content.push(render_part(part));
+            part_num = part_num + 1;
+        }
     }
     content.push(render_append_part_button());
+    content.push(render_separator("特殊能力"));
     content.push(render_special_ability(&enemy.special_ability));
     Html::div(
         Attributes::new()
@@ -22,6 +31,10 @@ pub fn render(enemy: &Enemy) -> Html<Msg> {
         Events::new(),
         content,
     )
+}
+
+fn render_separator(text: impl Into<String>) -> Html<Msg> {
+    Html::h3(Attributes::new(), Events::new(), vec![Html::text(text)])
 }
 
 fn render_name(name: &String) -> Html<Msg> {
@@ -240,7 +253,7 @@ fn render_append_part_button() -> Html<Msg> {
         Attributes::new()
             .class("pure-button")
             .class("pure-button-primary"),
-        Events::new(),
+        Events::new().on_click(|_| Msg::AppendPartToEnemy),
         vec![Html::text("部位を追加")],
     )
 }

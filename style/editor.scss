@@ -23,6 +23,10 @@
             }
         }
     }
+    & > h3 {
+        text-align: center;
+        border-bottom: 0.2ch solid $primary;
+    }
     & > textarea {
         min-height: 30rem;
     }

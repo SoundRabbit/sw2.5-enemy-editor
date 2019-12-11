@@ -23,7 +23,9 @@ struct State {
     enemy: Enemy,
 }
 
-pub enum Msg {}
+pub enum Msg {
+    AppendPartToEnemy,
+}
 
 struct Sub();
 
@@ -39,7 +41,12 @@ fn init() -> (State, Cmd<Msg, Sub>) {
 }
 
 fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
-    Cmd::none()
+    match msg {
+        Msg::AppendPartToEnemy => {
+            state.enemy.parts.push(enemy::Part::new());
+            Cmd::none()
+        }
+    }
 }
 
 fn render(state: &State) -> Html<Msg> {
