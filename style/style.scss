@@ -37,6 +37,24 @@ h1, h2, h3, h4, h5, h6 {
     width: 100vw;
     height: 100vh;
     background-color: $white;
+    display: flex;
+}
+
+@media screen and (orientation: portrait) {
+    #app {
+        flex-direction: column;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    #app {
+        flex-direction: row;
+    }
+
+    menu {
+        width: 20ch;
+        border-right: 0.5ch solid $primary;
+    }
 }
 
 @media screen and (min-width: 1400px) {

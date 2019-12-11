@@ -42,5 +42,13 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
 }
 
 fn render(state: &State) -> Html<Msg> {
-    Html::div(Attributes::new().id("app"), Events::new(), vec![])
+    Html::div(
+        Attributes::new().id("app"),
+        Events::new(),
+        vec![render_menu()],
+    )
+}
+
+fn render_menu() -> Html<Msg> {
+    Html::menu(Attributes::new(), Events::new(), vec![])
 }
