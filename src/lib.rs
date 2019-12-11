@@ -51,5 +51,13 @@ fn render(state: &State) -> Html<Msg> {
 }
 
 fn render_menu() -> Html<Msg> {
-    Html::menu(Attributes::new(), Events::new(), vec![])
+    Html::menu(
+        Attributes::new(),
+        Events::new(),
+        vec![Html::span(
+            Attributes::new().string("data-selected", "true"),
+            Events::new(),
+            vec![Html::text("編集")],
+        )],
+    )
 }

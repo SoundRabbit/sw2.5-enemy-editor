@@ -7,8 +7,13 @@
     box-sizing: border-box;
 }
 
-.noCoffeeSvgFilterDoc{
-    display: hidden;
+input:focus {
+    border-color: $primary !important;
+}
+
+button, input, select, textarea {
+    font-family : inherit;
+    font-size : 100%;
 }
 
 html {
@@ -25,7 +30,7 @@ body {
     margin: 0;
     width: 100vw;
     min-height: 100vh;
-    background-color: $dark;
+    background-color: $primary-dark;
     display: grid;
     justify-items: center;
     align-items: center;
@@ -41,6 +46,15 @@ body {
 menu {
     margin: 0;
     padding: 0;
+    & > * {
+        padding-left: 4ch;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+    & > *[data-selected="true"]{
+        background-color: $primary;
+        color: $white;
+    }
 }
 
 #content {
@@ -64,6 +78,8 @@ menu {
     menu {
         width: 20ch;
         border-right: 0.5ch solid $primary;
+        display: flex;
+        flex-direction: column;
     }
 
     #content {
