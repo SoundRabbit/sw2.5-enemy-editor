@@ -27,6 +27,9 @@
         text-align: center;
         border-bottom: 0.2ch solid $primary;
     }
+    & > .remove-part-button{
+        justify-self: end;
+    }
     & > textarea {
         min-height: 30rem;
     }

@@ -25,6 +25,7 @@ struct State {
 
 pub enum Msg {
     AppendPartToEnemy,
+    RemovePartFromEnemy(u32),
 }
 
 struct Sub();
@@ -44,6 +45,10 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
     match msg {
         Msg::AppendPartToEnemy => {
             state.enemy.parts.push(enemy::Part::new());
+            Cmd::none()
+        }
+        Msg::RemovePartFromEnemy(position) => {
+            state.enemy.parts.remove(position as usize);
             Cmd::none()
         }
     }

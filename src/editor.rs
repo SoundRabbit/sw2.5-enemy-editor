@@ -17,6 +17,7 @@ pub fn render(enemy: &Enemy) -> Html<Msg> {
                 String::from("部位") + &part_num.to_string(),
             ));
             content.push(render_part(part));
+            content.push(render_remove_part_button(part_num));
             part_num = part_num + 1;
         }
     }
@@ -255,6 +256,20 @@ fn render_append_part_button() -> Html<Msg> {
             .class("pure-button-primary"),
         Events::new().on_click(|_| Msg::AppendPartToEnemy),
         vec![Html::text("部位を追加")],
+    )
+}
+
+fn render_remove_part_button(part_num: u32) -> Html<Msg> {
+    let position = part_num - 1;
+    Html::button(
+        Attributes::new()
+            .class("pure-button")
+            .class("button-secondary")
+            .class("remove-part-button"),
+        Events::new().on_click(move |_| Msg::RemovePartFromEnemy(position)),
+        vec![Html::text(
+            String::from("部位") + &part_num.to_string() + "を削除",
+        )],
     )
 }
 
