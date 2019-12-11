@@ -11,5 +11,36 @@ use wasm_bindgen::prelude::*;
 
 mod enemy;
 
+use enemy::Enemy;
+
 #[wasm_bindgen(start)]
-pub fn main() {}
+pub fn main() {
+    kagura::run(new(), "app");
+}
+
+struct State {
+    enemy: Enemy,
+}
+
+enum Msg {}
+
+struct Sub();
+
+fn new() -> Component<Msg, State, Sub> {
+    Component::new(init, update, render)
+}
+
+fn init() -> (State, Cmd<Msg, Sub>) {
+    let state = State {
+        enemy: Enemy::new(),
+    };
+    (state, Cmd::none())
+}
+
+fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
+    Cmd::none()
+}
+
+fn render(state: &State) -> Html<Msg> {
+    Html::div(Attributes::new().id("app"), Events::new(), vec![])
+}

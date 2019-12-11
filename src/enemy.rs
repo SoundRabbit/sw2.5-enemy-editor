@@ -61,3 +61,50 @@ pub struct Reward {
     //* アイテム
     pub item: String,
 }
+
+impl Enemy {
+    pub fn new() -> Self {
+        Enemy {
+            name: String::new(),
+            level: String::new(),
+            kind: String::new(),
+            intelligence: String::new(),
+            sensation: String::new(),
+            reaction: String::new(),
+            language: Vec::new(),
+            habitat: String::new(),
+            popularity: (String::new(), String::new()),
+            weak_point: String::new(),
+            preemption: String::new(),
+            speed: String::new(),
+            life_resistance: String::new(),
+            mental_resistance: String::new(),
+            special_ability: String::new(),
+            parts: Vec::new(),
+            rewards: Vec::new(),
+        }
+    }
+}
+
+impl Part {
+    pub fn new() -> Self {
+        Part {
+            way_to_attack: String::new(),
+            accuracy: String::new(),
+            damage: String::new(),
+            evasion: String::new(),
+            defense: String::new(),
+            hp: String::new(),
+            mp: String::new(),
+        }
+    }
+}
+
+impl Reward {
+    pub fn new() -> Self {
+        Reward {
+            dice: String::new(),
+            item: String::new(),
+        }
+    }
+}
