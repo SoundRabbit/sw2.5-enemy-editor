@@ -14,7 +14,7 @@ pub struct Enemy {
     //* 反応
     pub reaction: String,
     //* 言語
-    pub language: Vec<String>,
+    pub language: String,
     //* 生息地
     pub habitat: String,
     //* 知名度
@@ -74,7 +74,7 @@ impl Enemy {
             intelligence: String::new(),
             sensation: String::new(),
             reaction: String::new(),
-            language: Vec::new(),
+            language: String::new(),
             habitat: String::new(),
             popularity: (String::new(), String::new()),
             weak_point: String::new(),
