@@ -11,6 +11,10 @@ textarea:focus, input:focus {
     border-color: $primary !important;
 }
 
+textarea {
+    resize: none;
+}
+
 button, input, select, textarea {
     font-family : inherit;
     font-size : 100%;

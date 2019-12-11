@@ -6,3 +6,8 @@ $accent: #DF739D;
 $black: #101820;
 $dark: #203640;
 $white: #fff;
+
+.pure-button-primary {
+    background-color: $primary;
+    color: $black;
+}
