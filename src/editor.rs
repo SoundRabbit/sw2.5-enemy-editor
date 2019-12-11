@@ -9,13 +9,11 @@ pub fn render(enemy: &Enemy) -> Html<Msg> {
         render_level_kind(&enemy.level, &enemy.kind),
         render_separator("基本情報"),
         render_props(&enemy),
+        render_separator("部位"),
     ];
     {
         let mut part_num = 1;
         for part in &enemy.parts {
-            content.push(render_separator(
-                String::from("部位") + &part_num.to_string(),
-            ));
             content.push(render_part(part));
             content.push(render_remove_part_button(part_num));
             part_num = part_num + 1;
@@ -40,8 +38,11 @@ fn render_separator(text: impl Into<String>) -> Html<Msg> {
 
 fn render_name(name: &String) -> Html<Msg> {
     Html::input(
-        Attributes::new().string("data-type", "name"),
-        Events::new(),
+        Attributes::new()
+            .string("data-type", "name")
+            .value(name)
+            .placeholder("魔物の名前"),
+        Events::new().on_input(|name| Msg::InputNameOfEnemy(name)),
         vec![],
     )
 }

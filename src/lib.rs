@@ -25,6 +25,21 @@ struct State {
 }
 
 pub enum Msg {
+    InputNameOfEnemy(String),
+    InputLevelOfEnemy(String),
+    InputKindOfEnemy(String),
+    InputIntelligenceOfEnemy(String),
+    InputSensationOfEnemy(String),
+    InputReactionOfEnemy(String),
+    InputLanguageOfEnemy(String),
+    InputHabitatOfEnemy(String),
+    InputPopularityOfEnemy0(String),
+    InputPopularityOfEnemy1(String),
+    InputWeakPointOfEnemy(String),
+    InputSpeedOfEnemt(String),
+    InputLifeResistanceOfEnemy(String),
+    InputMentalResistanceOfEnemy(String),
+    InputSpecialAbilityOfEnemy(String),
     AppendPartToEnemy,
     RemovePartFromEnemy(u32),
     Save,
@@ -45,6 +60,66 @@ fn init() -> (State, Cmd<Msg, Sub>) {
 
 fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
     match msg {
+        Msg::InputNameOfEnemy(name) => {
+            state.enemy.name = name;
+            Cmd::none()
+        }
+        Msg::InputLevelOfEnemy(level) => {
+            state.enemy.level = level;
+            Cmd::none()
+        }
+        Msg::InputKindOfEnemy(kind) => {
+            state.enemy.kind = kind;
+            Cmd::none()
+        }
+        Msg::InputIntelligenceOfEnemy(intelligence) => {
+            state.enemy.intelligence = intelligence;
+            Cmd::none()
+        }
+        Msg::InputSensationOfEnemy(sensation) => {
+            state.enemy.sensation = sensation;
+            Cmd::none()
+        }
+        Msg::InputReactionOfEnemy(reaction) => {
+            state.enemy.reaction = reaction;
+            Cmd::none()
+        }
+        Msg::InputLanguageOfEnemy(language) => {
+            state.enemy.language = language;
+            Cmd::none()
+        }
+        Msg::InputHabitatOfEnemy(habitat) => {
+            state.enemy.habitat = habitat;
+            Cmd::none()
+        }
+        Msg::InputPopularityOfEnemy0(popularity) => {
+            state.enemy.popularity.0 = popularity;
+            Cmd::none()
+        }
+        Msg::InputPopularityOfEnemy1(popularity) => {
+            state.enemy.popularity.1 = popularity;
+            Cmd::none()
+        }
+        Msg::InputWeakPointOfEnemy(weak_point) => {
+            state.enemy.weak_point = weak_point;
+            Cmd::none()
+        }
+        Msg::InputSpeedOfEnemt(speed) => {
+            state.enemy.speed = speed;
+            Cmd::none()
+        }
+        Msg::InputLifeResistanceOfEnemy(life_resistance) => {
+            state.enemy.life_resistance = life_resistance;
+            Cmd::none()
+        }
+        Msg::InputMentalResistanceOfEnemy(mental_resistance) => {
+            state.enemy.mental_resistance = mental_resistance;
+            Cmd::none()
+        }
+        Msg::InputSpecialAbilityOfEnemy(special_ability) => {
+            state.enemy.special_ability = special_ability;
+            Cmd::none()
+        }
         Msg::AppendPartToEnemy => {
             state.enemy.parts.push(enemy::Part::new());
             Cmd::none()
