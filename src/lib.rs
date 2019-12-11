@@ -36,7 +36,8 @@ pub enum Msg {
     InputPopularityOfEnemy0(String),
     InputPopularityOfEnemy1(String),
     InputWeakPointOfEnemy(String),
-    InputSpeedOfEnemt(String),
+    InputPreemptionOfEnemy(String),
+    InputSpeedOfEnemy(String),
     InputLifeResistanceOfEnemy(String),
     InputMentalResistanceOfEnemy(String),
     InputSpecialAbilityOfEnemy(String),
@@ -104,7 +105,11 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             state.enemy.weak_point = weak_point;
             Cmd::none()
         }
-        Msg::InputSpeedOfEnemt(speed) => {
+        Msg::InputPreemptionOfEnemy(preemption) => {
+            state.enemy.preemption = preemption;
+            Cmd::none()
+        }
+        Msg::InputSpeedOfEnemy(speed) => {
             state.enemy.speed = speed;
             Cmd::none()
         }

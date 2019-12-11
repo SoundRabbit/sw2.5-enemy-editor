@@ -42,7 +42,7 @@ fn render_name(name: &String) -> Html<Msg> {
             .string("data-type", "name")
             .value(name)
             .placeholder("魔物の名前"),
-        Events::new().on_input(|name| Msg::InputNameOfEnemy(name)),
+        Events::new().on_input(|a| Msg::InputNameOfEnemy(a)),
         vec![],
     )
 }
@@ -57,7 +57,11 @@ fn render_level_kind(level: &String, kind: &String) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("レベル")]),
-                    Html::input(Attributes::new().value(level), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(level),
+                        Events::new().on_input(|a| Msg::InputLevelOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -65,7 +69,11 @@ fn render_level_kind(level: &String, kind: &String) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("分類")]),
-                    Html::input(Attributes::new().value(kind), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(kind),
+                        Events::new().on_input(|a| Msg::InputKindOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
         ],
@@ -82,7 +90,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("知能")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.intelligence),
+                        Events::new().on_input(|a| Msg::InputIntelligenceOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -90,7 +102,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("知覚")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.sensation),
+                        Events::new().on_input(|a| Msg::InputSensationOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -98,7 +114,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("反応")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.reaction),
+                        Events::new().on_input(|a| Msg::InputReactionOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -106,7 +126,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("言語")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.language),
+                        Events::new().on_input(|a| Msg::InputLanguageOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -114,7 +138,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("生息地")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.habitat),
+                        Events::new().on_input(|a| Msg::InputHabitatOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -122,8 +150,16 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("知名度")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.popularity.0),
+                        Events::new().on_input(|a| Msg::InputPopularityOfEnemy0(a)),
+                        vec![],
+                    ),
+                    Html::input(
+                        Attributes::new().value(&enemy.popularity.1),
+                        Events::new().on_input(|a| Msg::InputPopularityOfEnemy1(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -131,7 +167,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("弱点")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.weak_point),
+                        Events::new().on_input(|a| Msg::InputWeakPointOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -139,7 +179,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                 Events::new(),
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("先制値")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.preemption),
+                        Events::new().on_input(|a| Msg::InputPreemptionOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -151,7 +195,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                         Events::new(),
                         vec![Html::text("移動速度")],
                     ),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.speed),
+                        Events::new().on_input(|a| Msg::InputSpeedOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -163,7 +211,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                         Events::new(),
                         vec![Html::text("生命抵抗力")],
                     ),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.life_resistance),
+                        Events::new().on_input(|a| Msg::InputLifeResistanceOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
             Html::div(
@@ -175,7 +227,11 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                         Events::new(),
                         vec![Html::text("精神抵抗力")],
                     ),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(
+                        Attributes::new().value(&enemy.mental_resistance),
+                        Events::new().on_input(|a| Msg::InputMentalResistanceOfEnemy(a)),
+                        vec![],
+                    ),
                 ],
             ),
         ],
