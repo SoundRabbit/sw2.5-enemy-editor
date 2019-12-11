@@ -20,8 +20,7 @@ serde_derive = "1.0.103"
 toml = "0.5.5"
 
 [dependencies.kagura]
-# version = "0.8.2"
-path="D:\\program\\Kagura"
+version = "0.8.3"
 
 [dependencies.web-sys]
 version = "0.3.32"
