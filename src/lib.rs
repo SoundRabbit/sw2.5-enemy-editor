@@ -8,6 +8,7 @@ extern crate toml;
 
 use kagura::prelude::*;
 use wasm_bindgen::prelude::*;
+use wasm_bindgen::JsCast;
 
 mod editor;
 mod enemy;
@@ -26,6 +27,7 @@ struct State {
 pub enum Msg {
     AppendPartToEnemy,
     RemovePartFromEnemy(u32),
+    Save,
 }
 
 struct Sub();
@@ -49,6 +51,24 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
         }
         Msg::RemovePartFromEnemy(position) => {
             state.enemy.parts.remove(position as usize);
+            Cmd::none()
+        }
+        Msg::Save => {
+            let save_data = toml::to_string(&state.enemy).unwrap();
+            let blob = web_sys::Blob::new_with_str_sequence_and_options(
+                &JsValue::from_serde(&[save_data]).unwrap(),
+                web_sys::BlobPropertyBag::new().type_("application/toml"),
+            )
+            .unwrap();
+            let url = web_sys::Url::create_object_url_with_blob(&blob).unwrap();
+            let document = web_sys::window().unwrap().document().unwrap();
+            let a = document.create_element("a").unwrap();
+            a.set_attribute("href", &url);
+            a.set_attribute("download", &(String::new() + &state.enemy.name + ".toml"));
+            a.set_attribute("style", "display: none");
+            document.body().unwrap().append_child(&a);
+            a.dyn_ref::<web_sys::HtmlElement>().unwrap().click();
+            document.body().unwrap().remove_child(&a);
             Cmd::none()
         }
     }
@@ -82,7 +102,7 @@ fn render_menu() -> Html<Msg> {
             ),
             Html::span(
                 Attributes::new().class("pure-button").class("item"),
-                Events::new(),
+                Events::new().on_click(|_| Msg::Save),
                 vec![Html::text("保存")],
             ),
             Html::span(

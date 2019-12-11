@@ -25,6 +25,12 @@ version = "0.8.3"
 [dependencies.web-sys]
 version = "0.3.32"
 features = [
+    "Blob",
+    "BlobPropertyBag",
     "console",
+    "Document",
+    "Element",
+    "HtmlElement",
+    "Url",
     "Window",
 ]
