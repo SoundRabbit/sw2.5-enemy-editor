@@ -17,9 +17,14 @@
         & > div {
             display: grid;
             grid-template-columns: 10ch 1fr;
+            grid-auto-columns: 1fr;
+            grid-auto-flow: column;
             column-gap: 2ch;
             & > label {
                 text-align: right;
+            }
+            & > input {
+                width: 100%;
             }
         }
     }

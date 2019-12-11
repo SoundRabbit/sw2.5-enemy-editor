@@ -122,6 +122,7 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
                 vec![
                     Html::label(Attributes::new(), Events::new(), vec![Html::text("知名度")]),
                     Html::input(Attributes::new().value(""), Events::new(), vec![]),
+                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
                 ],
             ),
             Html::div(
