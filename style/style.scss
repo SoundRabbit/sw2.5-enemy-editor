@@ -1,0 +1,29 @@
+@import "./pure-release-1.0.1/pure-min.css";
+@import "color.scss";
+@import "font.scss";
+
+* {
+    box-sizing: border-box;
+}
+
+.noCoffeeSvgFilterDoc{
+    display: hidden;
+}
+
+html {
+    color: $black;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: $serif;
+    font-style: normal;
+    font-weight: 400;
+}
