@@ -4,7 +4,7 @@ extern crate wasm_bindgen;
 extern crate web_sys;
 #[macro_use]
 extern crate serde_derive;
-extern crate toml;
+extern crate serde_json;
 
 use kagura::prelude::*;
 use wasm_bindgen::prelude::*;
@@ -42,7 +42,14 @@ pub enum Msg {
     InputMentalResistanceOfEnemy(String),
     InputSpecialAbilityOfEnemy(String),
     AppendPartToEnemy,
-    RemovePartFromEnemy(u32),
+    RemovePartFromEnemy(usize),
+    InputWayToAttackOfPartOfEnemy(usize, String),
+    InputAccuracyOfPartOfEnemy(usize, String),
+    InputDamageOfPartOfEnemy(usize, String),
+    InputEvasionOfPartOfEnemy(usize, String),
+    InputDefenceOfPartOfEnemy(usize, String),
+    InputHpOfPartOfEnemy(usize, String),
+    InputMpOfPartOfEnemy(usize, String),
     Save,
 }
 
@@ -130,21 +137,63 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             Cmd::none()
         }
         Msg::RemovePartFromEnemy(position) => {
-            state.enemy.parts.remove(position as usize);
+            state.enemy.parts.remove(position);
+            Cmd::none()
+        }
+        Msg::InputWayToAttackOfPartOfEnemy(position, way_to_attack) => {
+            if let Some(part) = state.enemy.parts.get_mut(position) {
+                part.way_to_attack = way_to_attack;
+            }
+            Cmd::none()
+        }
+        Msg::InputAccuracyOfPartOfEnemy(position, accuracy) => {
+            if let Some(part) = state.enemy.parts.get_mut(position) {
+                part.accuracy = accuracy;
+            }
+            Cmd::none()
+        }
+        Msg::InputDamageOfPartOfEnemy(position, damage) => {
+            if let Some(part) = state.enemy.parts.get_mut(position) {
+                part.damage = damage;
+            }
+            Cmd::none()
+        }
+        Msg::InputEvasionOfPartOfEnemy(position, evasion) => {
+            if let Some(part) = state.enemy.parts.get_mut(position) {
+                part.evasion = evasion;
+            }
+            Cmd::none()
+        }
+        Msg::InputDefenceOfPartOfEnemy(position, defense) => {
+            if let Some(part) = state.enemy.parts.get_mut(position) {
+                part.defense = defense;
+            }
+            Cmd::none()
+        }
+        Msg::InputHpOfPartOfEnemy(position, hp) => {
+            if let Some(part) = state.enemy.parts.get_mut(position) {
+                part.hp = hp;
+            }
+            Cmd::none()
+        }
+        Msg::InputMpOfPartOfEnemy(position, mp) => {
+            if let Some(part) = state.enemy.parts.get_mut(position) {
+                part.mp = mp;
+            }
             Cmd::none()
         }
         Msg::Save => {
-            let save_data = toml::to_string(&state.enemy).unwrap();
+            let save_data = serde_json::to_string_pretty(&state.enemy).unwrap();
             let blob = web_sys::Blob::new_with_str_sequence_and_options(
                 &JsValue::from_serde(&[save_data]).unwrap(),
-                web_sys::BlobPropertyBag::new().type_("application/toml"),
+                web_sys::BlobPropertyBag::new().type_("application/json"),
             )
             .unwrap();
             let url = web_sys::Url::create_object_url_with_blob(&blob).unwrap();
             let document = web_sys::window().unwrap().document().unwrap();
             let a = document.create_element("a").unwrap();
             a.set_attribute("href", &url);
-            a.set_attribute("download", &(String::new() + &state.enemy.name + ".toml"));
+            a.set_attribute("download", &(String::new() + &state.enemy.name));
             a.set_attribute("style", "display: none");
             document.body().unwrap().append_child(&a);
             a.dyn_ref::<web_sys::HtmlElement>().unwrap().click();

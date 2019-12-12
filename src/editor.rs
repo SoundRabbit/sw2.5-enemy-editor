@@ -14,7 +14,7 @@ pub fn render(enemy: &Enemy) -> Html<Msg> {
     {
         let mut part_num = 1;
         for part in &enemy.parts {
-            content.push(render_part(part));
+            content.push(render_part(part_num, part));
             content.push(render_remove_part_button(part_num));
             part_num = part_num + 1;
         }
@@ -238,71 +238,48 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
     )
 }
 
-fn render_part(part: &enemy::Part) -> Html<Msg> {
+fn render_part(part_num: usize, part: &enemy::Part) -> Html<Msg> {
+    let position = part_num - 1;
     Html::div(
         Attributes::new(),
         Events::new(),
         vec![
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(
-                        Attributes::new(),
-                        Events::new(),
-                        vec![Html::text("攻撃方法")],
-                    ),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("命中")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("打撃点")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("回避力")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("防護点")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("HP")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("MP")]),
-                    Html::input(Attributes::new().value(""), Events::new(), vec![]),
-                ],
-            ),
+            render_part_props("攻撃方法（部位）", &part.way_to_attack, move |a| {
+                Msg::InputWayToAttackOfPartOfEnemy(position, a)
+            }),
+            render_part_props("命中", &part.accuracy, move |a| {
+                Msg::InputAccuracyOfPartOfEnemy(position, a)
+            }),
+            render_part_props("打撃点", &part.damage, move |a| {
+                Msg::InputDamageOfPartOfEnemy(position, a)
+            }),
+            render_part_props("回避力", &part.evasion, move |a| {
+                Msg::InputWayToAttackOfPartOfEnemy(position, a)
+            }),
+            render_part_props("防護点", &part.defense, move |a| {
+                Msg::InputDefenceOfPartOfEnemy(position, a)
+            }),
+            render_part_props("HP", &part.hp, move |a| {
+                Msg::InputHpOfPartOfEnemy(position, a)
+            }),
+            render_part_props("MP", &part.mp, move |a| {
+                Msg::InputMpOfPartOfEnemy(position, a)
+            }),
+        ],
+    )
+}
+
+fn render_part_props(
+    name: impl Into<String>,
+    value: impl Into<String>,
+    handler: impl FnOnce(String) -> Msg + 'static,
+) -> Html<Msg> {
+    Html::div(
+        Attributes::new().class("pure-control-group"),
+        Events::new().on_input(handler),
+        vec![
+            Html::label(Attributes::new(), Events::new(), vec![Html::text(name)]),
+            Html::input(Attributes::new().value(value), Events::new(), vec![]),
         ],
     )
 }
@@ -317,7 +294,7 @@ fn render_append_part_button() -> Html<Msg> {
     )
 }
 
-fn render_remove_part_button(part_num: u32) -> Html<Msg> {
+fn render_remove_part_button(part_num: usize) -> Html<Msg> {
     let position = part_num - 1;
     Html::button(
         Attributes::new()
