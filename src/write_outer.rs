@@ -13,7 +13,7 @@ pub fn render() -> Html<Msg> {
         vec![render_option(
             "Udonarium用に書き出し",
             "Udonarium用のXMLファイルを書き出します。zip圧縮して利用してください。",
-            || Msg::NoOp,
+            || Msg::WriteOutToUdonarium,
         )],
     )
 }

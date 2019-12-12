@@ -5,7 +5,6 @@ extern crate web_sys;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
-extern crate serde_xml_rs;
 
 use kagura::prelude::*;
 use wasm_bindgen::prelude::*;
@@ -16,6 +15,7 @@ mod enemy;
 mod file_loader;
 mod udonarium;
 mod write_outer;
+mod xml;
 
 use enemy::Enemy;
 
@@ -66,6 +66,7 @@ pub enum Msg {
     LoadEnemy(Enemy),
     Save,
     Load(web_sys::File),
+    WriteOutToUdonarium,
     NoOp,
 }
 
@@ -248,6 +249,25 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             let _ = file_reader.read_as_text(&blob);
             on_load.forget();
         }),
+        Msg::WriteOutToUdonarium => {
+            if let Some(save_data) = state.enemy.to_udonarium_string(0) {
+                let blob = web_sys::Blob::new_with_str_sequence_and_options(
+                    &JsValue::from_serde(&[save_data]).unwrap(),
+                    web_sys::BlobPropertyBag::new().type_("application/xml"),
+                )
+                .unwrap();
+                let url = web_sys::Url::create_object_url_with_blob(&blob).unwrap();
+                let document = web_sys::window().unwrap().document().unwrap();
+                let a = document.create_element("a").unwrap();
+                let _ = a.set_attribute("href", &url);
+                let _ = a.set_attribute("download", "data.xml");
+                let _ = a.set_attribute("style", "display: none");
+                let _ = document.body().unwrap().append_child(&a);
+                a.dyn_ref::<web_sys::HtmlElement>().unwrap().click();
+                let _ = document.body().unwrap().remove_child(&a);
+            }
+            Cmd::none()
+        }
         Msg::NoOp => Cmd::none(),
     }
 }
