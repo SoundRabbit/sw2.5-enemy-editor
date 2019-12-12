@@ -2,6 +2,7 @@
 @import "color.scss";
 @import "font.scss";
 @import "editor.scss";
+@import "file-loader.scss";
 
 * {
     box-sizing: border-box;
@@ -67,6 +68,11 @@ menu {
 #content {
     flex-grow: 1;
     overflow-y: scroll;
+}
+
+.drop-area {
+    border-radius: 4rem;
+    border: 0.5ch dashed $primary-trans;
 }
 
 @media screen and (orientation: landscape) and (min-width: 1030px) {

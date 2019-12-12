@@ -1,0 +1,26 @@
+@import "color.scss";
+
+#content[data-type="file-loader"] {
+    display: grid;
+    grid-template-columns: 2.5fr 13fr 2.5fr;
+    grid-template-rows: 5fr 21fr 8fr;
+    grid-template-areas: ". . ." ". fd ." ". fs .";
+    & .drop-area {
+        grid-area: fd;
+        font-size: 1.5rem;
+        display: grid;
+        justify-content: center;
+        align-content: center;
+    }
+    & .file-selecter {
+        grid-area: fs;
+        justify-self: center;
+        align-self: center;
+        & > label {
+            font-size: 1.1em;
+        }
+        & > input {
+            line-height: 1;
+        }
+    }
+}
