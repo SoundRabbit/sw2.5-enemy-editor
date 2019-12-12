@@ -179,7 +179,7 @@ fn render_part(part_num: usize, part: &enemy::Part) -> Html<Msg> {
                 Msg::InputDamageOfPartOfEnemy(position, a)
             }),
             render_part_props("回避力", &part.evasion, move |a| {
-                Msg::InputWayToAttackOfPartOfEnemy(position, a)
+                Msg::InputEvasionOfPartOfEnemy(position, a)
             }),
             render_part_props("防護点", &part.defense, move |a| {
                 Msg::InputDefenceOfPartOfEnemy(position, a)
