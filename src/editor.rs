@@ -85,154 +85,79 @@ fn render_props(enemy: &Enemy) -> Html<Msg> {
         Attributes::new(),
         Events::new(),
         vec![
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("知能")]),
-                    Html::input(
-                        Attributes::new().value(&enemy.intelligence),
-                        Events::new().on_input(|a| Msg::InputIntelligenceOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
+            render_props_1("知能", &enemy.intelligence, |a| {
+                Msg::InputIntelligenceOfEnemy(a)
+            }),
+            render_props_1("知覚", &enemy.sensation, |a| {
+                Msg::InputSensationOfEnemy(a)
+            }),
+            render_props_1("反応", &enemy.reaction, |a| Msg::InputReactionOfEnemy(a)),
+            render_props_1("言語", &enemy.language, |a| Msg::InputLanguageOfEnemy(a)),
+            render_props_1("生息地", &enemy.habitat, |a| Msg::InputHabitatOfEnemy(a)),
+            render_props_2(
+                "知名度",
+                &enemy.popularity.0,
+                &enemy.popularity.1,
+                |a| Msg::InputPopularityOfEnemy0(a),
+                |a| Msg::InputPopularityOfEnemy1(a),
             ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("知覚")]),
-                    Html::input(
-                        Attributes::new().value(&enemy.sensation),
-                        Events::new().on_input(|a| Msg::InputSensationOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
+            render_props_1("弱点", &enemy.weak_point, |a| {
+                Msg::InputWeakPointOfEnemy(a)
+            }),
+            render_props_1("先制値", &enemy.preemption, |a| {
+                Msg::InputPreemptionOfEnemy(a)
+            }),
+            render_props_1("移動速度", &enemy.speed, |a| Msg::InputSpeedOfEnemy(a)),
+            render_props_1("生命抵抗力", &enemy.life_resistance, |a| {
+                Msg::InputLifeResistanceOfEnemy(a)
+            }),
+            render_props_1("精神抵抗力", &enemy.mental_resistance, |a| {
+                Msg::InputMentalResistanceOfEnemy(a)
+            }),
+        ],
+    )
+}
+
+fn render_props_1(
+    name: impl Into<String>,
+    value: impl Into<String>,
+    handler: impl FnOnce(String) -> Msg + 'static,
+) -> Html<Msg> {
+    Html::div(
+        Attributes::new().class("pure-control-group"),
+        Events::new(),
+        vec![
+            Html::label(Attributes::new(), Events::new(), vec![Html::text(name)]),
+            Html::input(
+                Attributes::new().value(value),
+                Events::new().on_input(handler),
+                vec![],
             ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("反応")]),
-                    Html::input(
-                        Attributes::new().value(&enemy.reaction),
-                        Events::new().on_input(|a| Msg::InputReactionOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
+        ],
+    )
+}
+
+fn render_props_2(
+    name: impl Into<String>,
+    value_1: impl Into<String>,
+    value_2: impl Into<String>,
+    handler_1: impl FnOnce(String) -> Msg + 'static,
+    handler_2: impl FnOnce(String) -> Msg + 'static,
+) -> Html<Msg> {
+    Html::div(
+        Attributes::new().class("pure-control-group"),
+        Events::new(),
+        vec![
+            Html::label(Attributes::new(), Events::new(), vec![Html::text(name)]),
+            Html::input(
+                Attributes::new().value(value_1),
+                Events::new().on_input(handler_1),
+                vec![],
             ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("言語")]),
-                    Html::input(
-                        Attributes::new().value(&enemy.language),
-                        Events::new().on_input(|a| Msg::InputLanguageOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("生息地")]),
-                    Html::input(
-                        Attributes::new().value(&enemy.habitat),
-                        Events::new().on_input(|a| Msg::InputHabitatOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("知名度")]),
-                    Html::input(
-                        Attributes::new().value(&enemy.popularity.0),
-                        Events::new().on_input(|a| Msg::InputPopularityOfEnemy0(a)),
-                        vec![],
-                    ),
-                    Html::input(
-                        Attributes::new().value(&enemy.popularity.1),
-                        Events::new().on_input(|a| Msg::InputPopularityOfEnemy1(a)),
-                        vec![],
-                    ),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("弱点")]),
-                    Html::input(
-                        Attributes::new().value(&enemy.weak_point),
-                        Events::new().on_input(|a| Msg::InputWeakPointOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(Attributes::new(), Events::new(), vec![Html::text("先制値")]),
-                    Html::input(
-                        Attributes::new().value(&enemy.preemption),
-                        Events::new().on_input(|a| Msg::InputPreemptionOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(
-                        Attributes::new(),
-                        Events::new(),
-                        vec![Html::text("移動速度")],
-                    ),
-                    Html::input(
-                        Attributes::new().value(&enemy.speed),
-                        Events::new().on_input(|a| Msg::InputSpeedOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(
-                        Attributes::new(),
-                        Events::new(),
-                        vec![Html::text("生命抵抗力")],
-                    ),
-                    Html::input(
-                        Attributes::new().value(&enemy.life_resistance),
-                        Events::new().on_input(|a| Msg::InputLifeResistanceOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
-            ),
-            Html::div(
-                Attributes::new().class("pure-control-group"),
-                Events::new(),
-                vec![
-                    Html::label(
-                        Attributes::new(),
-                        Events::new(),
-                        vec![Html::text("精神抵抗力")],
-                    ),
-                    Html::input(
-                        Attributes::new().value(&enemy.mental_resistance),
-                        Events::new().on_input(|a| Msg::InputMentalResistanceOfEnemy(a)),
-                        vec![],
-                    ),
-                ],
+            Html::input(
+                Attributes::new().value(value_2),
+                Events::new().on_input(handler_2),
+                vec![],
             ),
         ],
     )
@@ -276,10 +201,14 @@ fn render_part_props(
 ) -> Html<Msg> {
     Html::div(
         Attributes::new().class("pure-control-group"),
-        Events::new().on_input(handler),
+        Events::new(),
         vec![
             Html::label(Attributes::new(), Events::new(), vec![Html::text(name)]),
-            Html::input(Attributes::new().value(value), Events::new(), vec![]),
+            Html::input(
+                Attributes::new().value(value),
+                Events::new().on_input(handler),
+                vec![],
+            ),
         ],
     )
 }
