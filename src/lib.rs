@@ -5,6 +5,7 @@ extern crate web_sys;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
+extern crate serde_xml_rs;
 
 use kagura::prelude::*;
 use wasm_bindgen::prelude::*;
@@ -13,6 +14,7 @@ use wasm_bindgen::JsCast;
 mod editor;
 mod enemy;
 mod file_loader;
+mod udonarium;
 mod write_outer;
 
 use enemy::Enemy;
