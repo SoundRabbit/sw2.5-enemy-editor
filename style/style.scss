@@ -97,21 +97,3 @@ menu {
         padding-right: 1.5rem;
     }
 }
-
-@media screen and (orientation: landscape) and (min-width: 1400px) {
-    #app {
-        width: 1400px;
-    }
-}
-
-@media screen and (orientation: landscape) and (min-height: 1030px) {
-    #app {
-        height: 1030px;
-    }
-}
-
-@media screen and (orientation: landscape) and (min-width: 1400px) and (min-height: 1030px) {
-    #app {
-        border-radius: 1rem;
-    }
-}
