@@ -59,7 +59,10 @@ pub enum Msg {
     InputHpOfPartOfEnemy(usize, String),
     InputMpOfPartOfEnemy(usize, String),
     ChangeTab(Tab),
+    LoadEnemy(Enemy),
     Save,
+    Load(web_sys::File),
+    NoOp,
 }
 
 struct Sub();
@@ -196,6 +199,10 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             state.tab = tab;
             Cmd::none()
         }
+        Msg::LoadEnemy(enemy) => {
+            state.enemy = enemy;
+            update(state, Msg::ChangeTab(Tab::Editor))
+        }
         Msg::Save => {
             let save_data = serde_json::to_string_pretty(&state.enemy).unwrap();
             let blob = web_sys::Blob::new_with_str_sequence_and_options(
@@ -206,14 +213,38 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             let url = web_sys::Url::create_object_url_with_blob(&blob).unwrap();
             let document = web_sys::window().unwrap().document().unwrap();
             let a = document.create_element("a").unwrap();
-            a.set_attribute("href", &url);
-            a.set_attribute("download", &(String::new() + &state.enemy.name));
-            a.set_attribute("style", "display: none");
-            document.body().unwrap().append_child(&a);
+            let _ = a.set_attribute("href", &url);
+            let _ = a.set_attribute("download", &(String::new() + &state.enemy.name));
+            let _ = a.set_attribute("style", "display: none");
+            let _ = document.body().unwrap().append_child(&a);
             a.dyn_ref::<web_sys::HtmlElement>().unwrap().click();
-            document.body().unwrap().remove_child(&a);
+            let _ = document.body().unwrap().remove_child(&a);
             Cmd::none()
         }
+        Msg::Load(file) => Cmd::task(move |resolver| {
+            let file_reader = web_sys::FileReader::new().unwrap();
+            let blob = file.dyn_into::<web_sys::Blob>().unwrap();
+            let on_load = Closure::once(Box::new(|e: web_sys::Event| {
+                let result = e
+                    .target()
+                    .unwrap()
+                    .dyn_into::<web_sys::FileReader>()
+                    .unwrap()
+                    .result();
+                if let Ok(result) = result {
+                    if let Some(text) = result.as_string() {
+                        if let Ok(enemy) = serde_json::from_str::<Enemy>(&text) {
+                            resolver(Msg::LoadEnemy(enemy));
+                            return;
+                        }
+                    }
+                }
+            }));
+            file_reader.set_onload(Some(&on_load.as_ref().unchecked_ref()));
+            let _ = file_reader.read_as_text(&blob);
+            on_load.forget();
+        }),
+        Msg::NoOp => Cmd::none(),
     }
 }
 

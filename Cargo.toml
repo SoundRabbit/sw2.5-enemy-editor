@@ -30,7 +30,12 @@ features = [
     "console",
     "Document",
     "Element",
+    "Event",
+    "File",
+    "FileList",
+    "FileReader",
     "HtmlElement",
+    "HtmlInputElement",
     "Url",
     "Window",
 ]

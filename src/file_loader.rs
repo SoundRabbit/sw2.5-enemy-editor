@@ -1,5 +1,6 @@
 use crate::Msg;
 use kagura::prelude::*;
+use wasm_bindgen::JsCast;
 
 pub fn render() -> Html<Msg> {
     Html::div(
@@ -19,7 +20,7 @@ fn render_drop_area() -> Html<Msg> {
         vec![Html::span(
             Attributes::new(),
             Events::new(),
-            vec![Html::text("ここにファイルをドロップ")],
+            vec![Html::text("ここにファイルをドロップ（未対応）")],
         )],
     )
 }
@@ -34,7 +35,24 @@ fn render_file_selecter() -> Html<Msg> {
                 Events::new(),
                 vec![Html::text("または：")],
             ),
-            Html::input(Attributes::new().type_("file"), Events::new(), vec![]),
+            Html::input(
+                Attributes::new().type_("file"),
+                Events::new().on("change", on_select_file),
+                vec![],
+            ),
         ],
     )
+}
+
+fn on_select_file(e: web_sys::Event) -> Msg {
+    if let Some(target) = e.target() {
+        if let Ok(input) = target.dyn_into::<web_sys::HtmlInputElement>() {
+            if let Some(file_list) = input.files() {
+                if let Some(file) = file_list.item(0) {
+                    return Msg::Load(file);
+                }
+            }
+        }
+    }
+    Msg::NoOp
 }
