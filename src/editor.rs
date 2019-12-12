@@ -241,15 +241,7 @@ fn render_remove_part_button(part_num: usize) -> Html<Msg> {
 fn render_special_ability(special_ability: &String) -> Html<Msg> {
     Html::textarea(
         Attributes::new().value(special_ability),
-        Events::new().on("input", |e| {
-            let a = e
-                .target()
-                .unwrap()
-                .dyn_into::<web_sys::HtmlTextAreaElement>()
-                .unwrap()
-                .value();
-            Msg::InputSpecialAbilityOfEnemy(a)
-        }),
+        Events::new().on_input(|a| Msg::InputSpecialAbilityOfEnemy(a)),
         vec![Html::text(special_ability)],
     )
 }
