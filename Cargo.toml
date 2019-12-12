@@ -28,6 +28,8 @@ features = [
     "Blob",
     "BlobPropertyBag",
     "console",
+    "DragEvent",
+    "DataTransfer",
     "Document",
     "Element",
     "Event",
