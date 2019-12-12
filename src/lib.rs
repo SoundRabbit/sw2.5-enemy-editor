@@ -142,6 +142,7 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             Cmd::none()
         }
         Msg::InputSpecialAbilityOfEnemy(special_ability) => {
+            web_sys::console::log_1(&JsValue::from(special_ability.clone()));
             state.enemy.special_ability = special_ability;
             Cmd::none()
         }

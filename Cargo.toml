@@ -36,6 +36,7 @@ features = [
     "FileReader",
     "HtmlElement",
     "HtmlInputElement",
+    "HtmlTextAreaElement",
     "Url",
     "Window",
 ]
