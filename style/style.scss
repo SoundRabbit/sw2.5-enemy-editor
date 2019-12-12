@@ -45,6 +45,7 @@ body {
     height: 100vh;
     background-color: $white;
     display: flex;
+    flex-direction: column;
 }
 
 menu {
@@ -68,19 +69,12 @@ menu {
     overflow-y: scroll;
 }
 
-@media screen and (orientation: portrait) {
-    #app {
-        flex-direction: column;
-    }
-}
-
-@media screen and (orientation: landscape) {
+@media screen and (orientation: landscape) and (min-width: 1030px) {
     #app {
         flex-direction: row;
         padding-top: 1.5rem;
         padding-bottom: 1.5rem;
     }
-
     menu {
         min-width: 20ch;
         max-width: 20ch;
@@ -98,19 +92,19 @@ menu {
     }
 }
 
-@media screen and (min-width: 1400px) {
+@media screen and (orientation: landscape) and (min-width: 1400px) {
     #app {
         width: 1400px;
     }
 }
 
-@media screen and (min-height: 1030px) {
+@media screen and (orientation: landscape) and (min-height: 1030px) {
     #app {
         height: 1030px;
     }
 }
 
-@media screen and (min-width: 1400px) and (min-height: 1030px) {
+@media screen and (orientation: landscape) and (min-width: 1400px) and (min-height: 1030px) {
     #app {
         border-radius: 1rem;
     }
