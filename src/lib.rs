@@ -12,6 +12,7 @@ use wasm_bindgen::JsCast;
 
 mod editor;
 mod enemy;
+mod file_loader;
 
 use enemy::Enemy;
 
