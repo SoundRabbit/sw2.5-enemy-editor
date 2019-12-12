@@ -1,0 +1,17 @@
+@import "color.scss";
+
+#content[data-type="write-outer"] {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: max-content;
+    & > div {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-auto-rows: max-content;
+        justify-items: start;
+        & > span {
+            padding-left: 1.5em;
+        }
+        
+    }
+}
