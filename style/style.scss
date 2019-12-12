@@ -89,6 +89,12 @@ menu {
         grid-auto-rows: max-content;
         & > .item {
             border-bottom: 0.3ch solid $primary;
+            &:focus {
+                border-color: $primary;
+            }
+            &:active {
+                border-color: $primary;
+            }
         }
     }
 
