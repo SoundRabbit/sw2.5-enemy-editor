@@ -23,6 +23,13 @@ pub fn main() {
 
 struct State {
     enemy: Enemy,
+    tab: Tab,
+}
+
+#[derive(PartialEq)]
+pub enum Tab {
+    Editor,
+    FileLoader,
 }
 
 pub enum Msg {
@@ -51,6 +58,7 @@ pub enum Msg {
     InputDefenceOfPartOfEnemy(usize, String),
     InputHpOfPartOfEnemy(usize, String),
     InputMpOfPartOfEnemy(usize, String),
+    ChangeTab(Tab),
     Save,
 }
 
@@ -63,6 +71,7 @@ fn new() -> Component<Msg, State, Sub> {
 fn init() -> (State, Cmd<Msg, Sub>) {
     let state = State {
         enemy: Enemy::new(),
+        tab: Tab::Editor,
     };
     (state, Cmd::none())
 }
@@ -183,6 +192,10 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             }
             Cmd::none()
         }
+        Msg::ChangeTab(tab) => {
+            state.tab = tab;
+            Cmd::none()
+        }
         Msg::Save => {
             let save_data = serde_json::to_string_pretty(&state.enemy).unwrap();
             let blob = web_sys::Blob::new_with_str_sequence_and_options(
@@ -208,11 +221,17 @@ fn render(state: &State) -> Html<Msg> {
     Html::div(
         Attributes::new().id("app"),
         Events::new(),
-        vec![render_menu(), editor::render(&state.enemy)],
+        vec![
+            render_menu(&state),
+            match &state.tab {
+                Tab::Editor => editor::render(&state.enemy),
+                Tab::FileLoader => file_loader::render(),
+            },
+        ],
     )
 }
 
-fn render_menu() -> Html<Msg> {
+fn render_menu(state: &State) -> Html<Msg> {
     Html::menu(
         Attributes::new(),
         Events::new(),
@@ -221,8 +240,8 @@ fn render_menu() -> Html<Msg> {
                 Attributes::new()
                     .class("pure-button")
                     .class("item")
-                    .string("data-selected", "true"),
-                Events::new(),
+                    .string("data-selected", (state.tab == Tab::Editor).to_string()),
+                Events::new().on_click(|_| Msg::ChangeTab(Tab::Editor)),
                 vec![Html::text("編集")],
             ),
             Html::span(
@@ -236,8 +255,11 @@ fn render_menu() -> Html<Msg> {
                 vec![Html::text("保存")],
             ),
             Html::span(
-                Attributes::new().class("pure-button").class("item"),
-                Events::new(),
+                Attributes::new()
+                    .class("pure-button")
+                    .class("item")
+                    .string("data-selected", (state.tab == Tab::FileLoader).to_string()),
+                Events::new().on_click(|_| Msg::ChangeTab(Tab::FileLoader)),
                 vec![Html::text("読み込み")],
             ),
             Html::span(

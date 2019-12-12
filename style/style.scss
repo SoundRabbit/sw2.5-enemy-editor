@@ -81,7 +81,7 @@ menu {
         border-right: 0.5ch solid $primary;
         display: grid;
         grid-auto-rows: max-content;
-        & > .item:not([data-selected="true"]) {
+        & > .item {
             border-bottom: 0.3ch solid $primary;
         }
     }
