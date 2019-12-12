@@ -55,6 +55,7 @@ pub enum Msg {
     InputSpecialAbilityOfEnemy(String),
     AppendPartToEnemy,
     RemovePartFromEnemy(usize),
+    InputNameOfPartOfEnemy(usize, String),
     InputWayToAttackOfPartOfEnemy(usize, String),
     InputAccuracyOfPartOfEnemy(usize, String),
     InputDamageOfPartOfEnemy(usize, String),
@@ -158,6 +159,12 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             state.enemy.parts.remove(position);
             Cmd::none()
         }
+        Msg::InputNameOfPartOfEnemy(position, name) => {
+            if let Some(part) = state.enemy.parts.get_mut(position) {
+                part.name = name;
+            }
+            Cmd::none()
+        }
         Msg::InputWayToAttackOfPartOfEnemy(position, way_to_attack) => {
             if let Some(part) = state.enemy.parts.get_mut(position) {
                 part.way_to_attack = way_to_attack;
@@ -250,21 +257,28 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             on_load.forget();
         }),
         Msg::WriteOutToUdonarium => {
-            if let Some(save_data) = state.enemy.to_udonarium_string(0) {
-                let blob = web_sys::Blob::new_with_str_sequence_and_options(
-                    &JsValue::from_serde(&[save_data]).unwrap(),
-                    web_sys::BlobPropertyBag::new().type_("application/xml"),
-                )
-                .unwrap();
-                let url = web_sys::Url::create_object_url_with_blob(&blob).unwrap();
-                let document = web_sys::window().unwrap().document().unwrap();
-                let a = document.create_element("a").unwrap();
-                let _ = a.set_attribute("href", &url);
-                let _ = a.set_attribute("download", "data.xml");
-                let _ = a.set_attribute("style", "display: none");
-                let _ = document.body().unwrap().append_child(&a);
-                a.dyn_ref::<web_sys::HtmlElement>().unwrap().click();
-                let _ = document.body().unwrap().remove_child(&a);
+            let mut idx = 0;
+            for part in &state.enemy.parts {
+                if let Some(save_data) = state.enemy.to_udonarium_string(idx) {
+                    let blob = web_sys::Blob::new_with_str_sequence_and_options(
+                        &JsValue::from_serde(&[save_data]).unwrap(),
+                        web_sys::BlobPropertyBag::new().type_("application/xml"),
+                    )
+                    .unwrap();
+                    let url = web_sys::Url::create_object_url_with_blob(&blob).unwrap();
+                    let document = web_sys::window().unwrap().document().unwrap();
+                    let a = document.create_element("a").unwrap();
+                    let _ = a.set_attribute("href", &url);
+                    let _ = a.set_attribute(
+                        "download",
+                        &(String::new() + &state.enemy.name + "（" + &part.name + "）.xml"),
+                    );
+                    let _ = a.set_attribute("style", "display: none");
+                    let _ = document.body().unwrap().append_child(&a);
+                    a.dyn_ref::<web_sys::HtmlElement>().unwrap().click();
+                    let _ = document.body().unwrap().remove_child(&a);
+                }
+                idx = idx + 1;
             }
             Cmd::none()
         }

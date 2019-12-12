@@ -170,7 +170,10 @@ fn render_part(part_num: usize, part: &enemy::Part) -> Html<Msg> {
         Attributes::new(),
         Events::new(),
         vec![
-            render_part_props("攻撃方法（部位）", &part.way_to_attack, move |a| {
+            render_part_props("部位", &part.name, move |a| {
+                Msg::InputNameOfPartOfEnemy(position, a)
+            }),
+            render_part_props("攻撃方法", &part.way_to_attack, move |a| {
                 Msg::InputWayToAttackOfPartOfEnemy(position, a)
             }),
             render_part_props("命中", &part.accuracy, move |a| {

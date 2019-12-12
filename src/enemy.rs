@@ -40,6 +40,8 @@ pub struct Enemy {
 //* 部位
 #[derive(Deserialize, Serialize)]
 pub struct Part {
+    //* 部位名
+    pub name: String,
     //* 攻撃方法
     pub way_to_attack: String,
     //* 命中
@@ -92,6 +94,7 @@ impl Enemy {
 impl Part {
     pub fn new() -> Self {
         Part {
+            name: String::new(),
             way_to_attack: String::new(),
             accuracy: String::new(),
             damage: String::new(),
