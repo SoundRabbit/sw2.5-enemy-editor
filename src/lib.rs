@@ -314,11 +314,11 @@ fn render_menu(state: &State) -> Html<Msg> {
                 Events::new().on_click(|_| Msg::ChangeTab(Tab::Editor)),
                 vec![Html::text("編集")],
             ),
-            Html::span(
-                Attributes::new().class("pure-button").class("item"),
-                Events::new(),
-                vec![Html::text("プレビュー")],
-            ),
+            // Html::span(
+            //     Attributes::new().class("pure-button").class("item"),
+            //     Events::new(),
+            //     vec![Html::text("プレビュー")],
+            // ),
             Html::span(
                 Attributes::new().class("pure-button").class("item"),
                 Events::new().on_click(|_| Msg::Save),
