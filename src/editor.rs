@@ -309,5 +309,9 @@ fn render_remove_part_button(part_num: usize) -> Html<Msg> {
 }
 
 fn render_special_ability(special_ability: &String) -> Html<Msg> {
-    Html::textarea(Attributes::new(), Events::new(), vec![])
+    Html::textarea(
+        Attributes::new().value(special_ability),
+        Events::new().on_input(|a| Msg::InputSpecialAbilityOfEnemy(a)),
+        vec![],
+    )
 }
