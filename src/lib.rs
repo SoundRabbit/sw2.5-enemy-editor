@@ -13,6 +13,7 @@ use wasm_bindgen::JsCast;
 mod editor;
 mod enemy;
 mod file_loader;
+mod write_outer;
 
 use enemy::Enemy;
 
@@ -30,6 +31,7 @@ struct State {
 pub enum Tab {
     Editor,
     FileLoader,
+    WriteOuter,
 }
 
 pub enum Msg {
@@ -257,6 +259,7 @@ fn render(state: &State) -> Html<Msg> {
             match &state.tab {
                 Tab::Editor => editor::render(&state.enemy),
                 Tab::FileLoader => file_loader::render(),
+                Tab::WriteOuter => write_outer::render(),
             },
         ],
     )
@@ -294,8 +297,11 @@ fn render_menu(state: &State) -> Html<Msg> {
                 vec![Html::text("読み込み")],
             ),
             Html::span(
-                Attributes::new().class("pure-button").class("item"),
-                Events::new(),
+                Attributes::new()
+                    .class("pure-button")
+                    .class("item")
+                    .string("data-selected", (state.tab == Tab::WriteOuter).to_string()),
+                Events::new().on_click(|_| Msg::ChangeTab(Tab::WriteOuter)),
                 vec![Html::text("書き出し")],
             ),
         ],
