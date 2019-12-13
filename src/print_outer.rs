@@ -37,7 +37,7 @@ pub fn render(enemy: &Enemy) -> Html<Msg> {
                             .unwrap(),
                     )
                 }),
-                vec![Html::text("画像として保存（特殊能力の出力は調整中です）")],
+                vec![Html::text("画像として保存")],
             ),
         ],
     )
