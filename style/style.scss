@@ -5,6 +5,7 @@
 @import "file-loader.scss";
 @import "write-outer.scss";
 @import "print-outer.scss";
+@import "dialog.scss";
 
 * {
     box-sizing: border-box;
@@ -123,6 +124,9 @@ menu {
             overflow-y: hidden;
             padding: 0 !important;
             background-color: #fff;
+        }
+        & *[data-non-print="true"] {
+            display: none !important;
         }
     }
 }

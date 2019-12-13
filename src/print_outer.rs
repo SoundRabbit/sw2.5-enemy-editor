@@ -1,5 +1,6 @@
 use crate::enemy;
 use crate::enemy::Enemy;
+use crate::Dialog;
 use crate::Msg;
 use kagura::prelude::*;
 use wasm_bindgen::prelude::*;
@@ -11,7 +12,34 @@ pub fn render(enemy: &Enemy) -> Html<Msg> {
             .id("content")
             .string("data-type", "print-outer"),
         Events::new(),
-        vec![render_paper(&enemy)],
+        vec![
+            render_paper(&enemy),
+            Html::button(
+                Attributes::new()
+                    .class("pure-button")
+                    .class("pure-button-primary")
+                    .string("data-non-print", "true"),
+                Events::new().on_click(|_| Msg::PrintOut),
+                vec![Html::text("印刷")],
+            ),
+            Html::button(
+                Attributes::new()
+                    .class("pure-button")
+                    .class("pure-button-primary")
+                    .string("data-non-print", "true"),
+                Events::new().on_click(|_| {
+                    Msg::WriteOutElementAsImage(
+                        web_sys::window()
+                            .unwrap()
+                            .document()
+                            .unwrap()
+                            .get_element_by_id("paper")
+                            .unwrap(),
+                    )
+                }),
+                vec![Html::text("画像として保存（特殊能力の出力は調整中です）")],
+            ),
+        ],
     )
 }
 

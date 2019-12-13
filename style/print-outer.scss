@@ -3,6 +3,12 @@
 #content[data-type="print-outer"] {
     display: grid;
     justify-content: center;
+    grid-auto-rows: max-content;
+    row-gap: 1rem;
+    &>button {
+        justify-self: center;
+        align-self: center;
+    }
     & #paper {
         display: grid;
         grid-auto-rows: max-content;
@@ -79,6 +85,15 @@
         & #paper {
             width: 71vh;
             font-size: 1.347vh;
+        }
+    }
+}
+
+@media screen and (orientation: portrait) {
+    #content[data-type="print-outer"] {
+        & #paper {
+            width: 100vw;
+            font-size: 1.9vw;
         }
     }
 }

@@ -15,6 +15,7 @@ mod enemy;
 mod file_loader;
 mod print_outer;
 mod udonarium;
+mod virtual_renderer;
 mod write_outer;
 mod xml;
 
@@ -28,6 +29,7 @@ pub fn main() {
 struct State {
     enemy: Enemy,
     tab: Tab,
+    dialog: Option<Dialog>,
 }
 
 #[derive(PartialEq)]
@@ -37,6 +39,8 @@ pub enum Tab {
     WriteOuter,
     PrintOuter,
 }
+
+pub struct Dialog();
 
 pub enum Msg {
     InputNameOfEnemy(String),
@@ -70,6 +74,8 @@ pub enum Msg {
     Save,
     Load(web_sys::File),
     WriteOutToUdonarium,
+    WriteOutElementAsImage(web_sys::Element),
+    PrintOut,
     NoOp,
 }
 
@@ -83,6 +89,7 @@ fn init() -> (State, Cmd<Msg, Sub>) {
     let state = State {
         enemy: Enemy::new(),
         tab: Tab::Editor,
+        dialog: None,
     };
     (state, Cmd::none())
 }
@@ -284,26 +291,41 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             }
             Cmd::none()
         }
+        Msg::WriteOutElementAsImage(element) => {
+            let canvas = virtual_renderer::element_to_canvas(&element);
+            let url = canvas.to_data_url().unwrap();
+            let document = web_sys::window().unwrap().document().unwrap();
+            let a = document.create_element("a").unwrap();
+            let _ = a.set_attribute("href", &url);
+            let _ = a.set_attribute("download", &(String::new() + &state.enemy.name + ".png"));
+            let _ = a.set_attribute("style", "display: none");
+            let _ = document.body().unwrap().append_child(&a);
+            a.dyn_ref::<web_sys::HtmlElement>().unwrap().click();
+            let _ = document.body().unwrap().remove_child(&a);
+            Cmd::none()
+        }
+        Msg::PrintOut => {
+            web_sys::window().unwrap().print();
+            Cmd::none()
+        }
         Msg::NoOp => Cmd::none(),
     }
 }
 
 fn render(state: &State) -> Html<Msg> {
+    let content = match &state.tab {
+        Tab::Editor => editor::render(&state.enemy),
+        Tab::FileLoader => file_loader::render(),
+        Tab::WriteOuter => write_outer::render(),
+        Tab::PrintOuter => print_outer::render(&state.enemy),
+    };
     Html::div(
         Attributes::new().id("app").string(
             "data-print-content-only",
             (state.tab == Tab::PrintOuter).to_string(),
         ),
         Events::new(),
-        vec![
-            render_menu(&state),
-            match &state.tab {
-                Tab::Editor => editor::render(&state.enemy),
-                Tab::FileLoader => file_loader::render(),
-                Tab::WriteOuter => write_outer::render(),
-                Tab::PrintOuter => print_outer::render(&state.enemy),
-            },
-        ],
+        vec![render_menu(&state), content],
     )
 }
 
@@ -347,8 +369,16 @@ fn render_menu(state: &State) -> Html<Msg> {
                     .class("item")
                     .string("data-selected", (state.tab == Tab::PrintOuter).to_string()),
                 Events::new().on_click(|_| Msg::ChangeTab(Tab::PrintOuter)),
-                vec![Html::text("印刷")],
+                vec![Html::text("印刷/画像化")],
             ),
         ],
+    )
+}
+
+fn render_dialog(dialog: Html<Msg>) -> Html<Msg> {
+    Html::div(
+        Attributes::new().id("dialog-show-area"),
+        Events::new(),
+        vec![dialog],
     )
 }
