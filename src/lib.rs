@@ -13,6 +13,7 @@ use wasm_bindgen::JsCast;
 mod editor;
 mod enemy;
 mod file_loader;
+mod print_outer;
 mod udonarium;
 mod write_outer;
 mod xml;
@@ -34,6 +35,7 @@ pub enum Tab {
     Editor,
     FileLoader,
     WriteOuter,
+    PrintOuter,
 }
 
 pub enum Msg {
@@ -288,7 +290,10 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
 
 fn render(state: &State) -> Html<Msg> {
     Html::div(
-        Attributes::new().id("app"),
+        Attributes::new().id("app").string(
+            "data-print-content-only",
+            (state.tab == Tab::PrintOuter).to_string(),
+        ),
         Events::new(),
         vec![
             render_menu(&state),
@@ -296,6 +301,7 @@ fn render(state: &State) -> Html<Msg> {
                 Tab::Editor => editor::render(&state.enemy),
                 Tab::FileLoader => file_loader::render(),
                 Tab::WriteOuter => write_outer::render(),
+                Tab::PrintOuter => print_outer::render(&state.enemy),
             },
         ],
     )
@@ -314,11 +320,6 @@ fn render_menu(state: &State) -> Html<Msg> {
                 Events::new().on_click(|_| Msg::ChangeTab(Tab::Editor)),
                 vec![Html::text("編集")],
             ),
-            // Html::span(
-            //     Attributes::new().class("pure-button").class("item"),
-            //     Events::new(),
-            //     vec![Html::text("プレビュー")],
-            // ),
             Html::span(
                 Attributes::new().class("pure-button").class("item"),
                 Events::new().on_click(|_| Msg::Save),
@@ -339,6 +340,14 @@ fn render_menu(state: &State) -> Html<Msg> {
                     .string("data-selected", (state.tab == Tab::WriteOuter).to_string()),
                 Events::new().on_click(|_| Msg::ChangeTab(Tab::WriteOuter)),
                 vec![Html::text("書き出し")],
+            ),
+            Html::span(
+                Attributes::new()
+                    .class("pure-button")
+                    .class("item")
+                    .string("data-selected", (state.tab == Tab::PrintOuter).to_string()),
+                Events::new().on_click(|_| Msg::ChangeTab(Tab::PrintOuter)),
+                vec![Html::text("印刷")],
             ),
         ],
     )

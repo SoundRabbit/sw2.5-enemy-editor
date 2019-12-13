@@ -4,6 +4,7 @@
 @import "editor.scss";
 @import "file-loader.scss";
 @import "write-outer.scss";
+@import "print-outer.scss";
 
 * {
     box-sizing: border-box;
@@ -104,5 +105,24 @@ menu {
         padding-top: 0;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
+    }
+}
+
+@media print {
+    #app[data-print-content-only="true"] {
+        padding: 0 !important;
+        & menu {
+            display: none;
+        }
+        & #content{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            min-height: max-content;
+            overflow-y: hidden;
+            padding: 0 !important;
+            background-color: #fff;
+        }
     }
 }

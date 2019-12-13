@@ -6,7 +6,6 @@ use wasm_bindgen::JsCast;
 pub fn render() -> Html<Msg> {
     Html::div(
         Attributes::new()
-            .class("pure-form")
             .id("content")
             .string("data-type", "file-loader"),
         Events::new(),

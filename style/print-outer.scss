@@ -1,0 +1,93 @@
+@import "color.scss";
+
+#content[data-type="print-outer"] {
+    display: grid;
+    justify-content: center;
+    & #paper {
+        display: grid;
+        grid-auto-rows: max-content;
+        row-gap: 1em;
+    }
+    & #title-bar {
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(4ch, max-content) 1fr max-content;
+        border: 0.125em solid #000;
+        column-gap: 0.125em;;
+        &>span{
+            padding: 0 0.5em;
+            &:first-child{
+                background-color: #fff;
+                color: #000;
+            }
+            &:not(:first-child){
+                background-color: #000;
+                color: #fff;
+            }
+        }
+    }
+    & #props {
+        border: 0.125em solid #000;
+        & > div {
+            display: flex;
+            flex-wrap: wrap;
+            & > div {
+                &:not(:last-child) {
+                    margin-right: 2em;
+                }
+                &>span:first-child{
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+    & #parts {
+        border: 0.125em solid #000;
+        display: grid;
+        grid-template-columns: 8fr repeat(6, 5fr);
+        grid-auto-rows: max-content;
+        background-color: #000;
+        gap: 0.125em;
+        &>*{
+            text-align: center;
+            padding: 0 0.5em;
+            background-color: #fff;
+        }
+        &>.heading {
+            background-color: #000;
+            color: #fff;
+        }
+    }
+    & #special-ability {
+        display: grid;
+        grid-auto-rows: max-content;
+        border: 0.125em solid #000;
+        &>span{
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+        }
+        &>div{
+            column-count: 2;
+            column-rule: dotted;
+        }
+    }
+}
+
+@media screen and (orientation: landscape) {
+    #content[data-type="print-outer"] {
+        & #paper {
+            width: 71vh;
+            font-size: 1.347vh;
+        }
+    }
+}
+
+@media print and (orientation: portrait) {
+    #content[data-type="print-outer"] {
+        & #paper {
+            width: 100vw;
+            font-size: 4mm;
+        }
+    }
+}
