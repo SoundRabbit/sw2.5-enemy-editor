@@ -11,7 +11,7 @@ pub fn element_to_canvas(element: &web_sys::Element) -> web_sys::HtmlCanvasEleme
         .dyn_into::<web_sys::HtmlCanvasElement>()
         .unwrap();
     // 300dpi
-    let width = 210.0 / 25.4 * 600.0;
+    let width = 210.0 / 25.4 * 300.0;
     let client_rect = element.get_bounding_client_rect();
     let ratio = width / client_rect.width();
     let height = client_rect.height() * ratio;
@@ -23,6 +23,8 @@ pub fn element_to_canvas(element: &web_sys::Element) -> web_sys::HtmlCanvasEleme
         .unwrap()
         .dyn_into::<web_sys::CanvasRenderingContext2d>()
         .unwrap();
+    context.set_fill_style(&JsValue::from("#fff"));
+    context.fill_rect(0.0, 0.0, width, height);
     render_node_to_context(
         element,
         &context,
@@ -147,18 +149,21 @@ fn render_text_to_context(
     let client_rect = text.parent_element().unwrap().get_bounding_client_rect();
     let h = client_rect.height() * ratio;
     let w = client_rect.width() * ratio;
-    let font_size = 4.0 / (25.4 / 600.0);
+    let font_size = 4.0 / (25.4 / 300.0);
     let x = (client_rect.x() - offset.0) * ratio;
     let y = (client_rect.y() - offset.1) * ratio + font_size * 1.1;
+    let font_style = font_size.to_string() + "px fot-tsukuardgothic-std";
+    let line_height = font_size * 2.0;
+    let offset_y = (line_height - font_size) / 2.0;
     if bg_black {
         context.set_fill_style(&JsValue::from("#FFF"));
     } else {
         context.set_fill_style(&JsValue::from("#000"));
     }
-    context.set_font(&(font_size.to_string() + "px fot-tsukuardgothic-std"));
+    context.set_font(&font_style);
     let text = text.data();
     if column_count == 1 {
-        context.fill_text(&text, x, y + font_size * (*line_num as f64) * 1.1);
+        context.fill_text(&text, x, y + offset_y + (*line_num as f64) * line_height);
     } else {
         let mut alloced = String::new();
         for c in text.chars() {
@@ -166,12 +171,16 @@ fn render_text_to_context(
             let text_metrics = context.measure_text(&alloced).unwrap();
             if text_metrics.width() > w / 2.0 - font_size / 2.0 {
                 if let Some(c) = alloced.pop() {
-                    let hh = font_size * (*line_num as f64) * 1.3;
-                    if hh + font_size * 2.6 < h {
-                        context.fill_text(&alloced, x, y + hh);
+                    let hh = line_height * (*line_num as f64);
+                    if hh + font_size + (line_height - font_size) / 2.0 < h {
+                        context.fill_text(&alloced, x, y + hh + offset_y);
                     } else {
-                        let hh = hh - h + font_size * 2.6;
-                        context.fill_text(&alloced, x + w / 2.0 + font_size / 2.0, y + hh);
+                        let hh = hh - h;
+                        context.fill_text(
+                            &alloced,
+                            x + w / 2.0 + font_size / 2.0,
+                            y + hh + offset_y,
+                        );
                     }
                     alloced.clear();
                     alloced.push(c);
@@ -180,12 +189,12 @@ fn render_text_to_context(
             }
         }
         if alloced.len() > 0 {
-            let hh = font_size * (*line_num as f64) * 1.3;
-            if hh + font_size * 2.6 < h {
-                context.fill_text(&alloced, x, y + hh);
+            let hh = line_height * (*line_num as f64);
+            if hh + line_height < h {
+                context.fill_text(&alloced, x, y + hh + offset_y);
             } else {
-                let hh = hh - h + font_size * 2.6;
-                context.fill_text(&alloced, x + w / 2.0 + font_size / 2.0, y + hh);
+                let hh = hh - h;
+                context.fill_text(&alloced, x + w / 2.0 + font_size / 2.0, y + hh + offset_y);
             }
         }
     }

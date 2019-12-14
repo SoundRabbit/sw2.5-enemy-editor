@@ -13,6 +13,9 @@
         display: grid;
         grid-auto-rows: max-content;
         row-gap: 1em;
+        & > * {
+            line-height: 2;
+        }
     }
     & #title-bar {
         width: 100%;
@@ -38,11 +41,16 @@
             display: flex;
             flex-wrap: wrap;
             & > div {
+                display: grid;
+                grid-template-columns: max-content max-content;
                 &:not(:last-child) {
                     margin-right: 2em;
                 }
-                &>span:first-child{
-                    font-weight: 700;
+                &>span{
+                    display: block;
+                    &:first-child{
+                        font-weight: 700;
+                    }
                 }
             }
         }
