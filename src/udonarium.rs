@@ -82,7 +82,7 @@ impl Enemy {
                     ),
                 ],
             ));
-            character.add_child(Node::chat_palette(""));
+            character.add_child(Node::chat_palette(part.to_udonarium_chat_pallet(false)));
             Some(character.to_string())
         } else {
             None
@@ -133,7 +133,7 @@ impl enemy::Part {
             let name = String::new() + "(" + &self.name + ")";
             vec![
                 Node::data_with_value(String::new() + "攻撃方法" + &name, &self.way_to_attack),
-                Node::data_with_value(String::new() + "命中" + &name, &self.accuracy),
+                Node::data_with_value(String::new() + "命中力" + &name, &self.accuracy),
                 Node::data_with_value(String::new() + "打撃点" + &name, &self.damage),
                 Node::data_with_value(String::new() + "回避力" + &name, &self.evasion),
                 Node::data_with_value(String::new() + "防護点" + &name, &self.defense),
@@ -141,11 +141,56 @@ impl enemy::Part {
         } else {
             vec![
                 Node::data_with_value("攻撃方法", &self.way_to_attack),
-                Node::data_with_value("命中", &self.accuracy),
+                Node::data_with_value("命中力", &self.accuracy),
                 Node::data_with_value("打撃点", &self.damage),
                 Node::data_with_value("回避力", &self.evasion),
                 Node::data_with_value("防護点", &self.defense),
             ]
         }
+    }
+
+    fn to_udonarium_chat_pallet(&self, with_name: bool) -> String {
+        let mut text = String::new();
+        let name = if with_name {
+            String::new() + "(" + &self.name + ")"
+        } else {
+            String::new()
+        };
+        let way_to_attack = String::new() + "攻撃方法" + &name;
+        let accuracy = String::new() + "命中力" + &name;
+        let damage = String::new() + "打撃点" + &name;
+        let evasion = String::new() + "回避力" + &name;
+        let defense = String::new() + "防護点" + &name;
+        let hp = String::new() + "HP" + &name;
+        let mp = String::new() + "MP" + &name;
+        if with_name {
+            text = text + "=====" + &self.name + "=====";
+        }
+        text = text
+            + "2d+{"
+            + &accuracy
+            + "} 【命中力判定"
+            + &name
+            + "】攻撃方法：{"
+            + &way_to_attack
+            + "}\n";
+        text = text
+            + "{"
+            + &damage
+            + "} 【与ダメージ"
+            + &name
+            + "】攻撃方法：{"
+            + &way_to_attack
+            + "}\n";
+        text = text + "\n";
+        text = text + "2d+{" + &evasion + "} 【回避力判定" + &name + "】\n";
+        text = text + "2d+{精神抵抗力} 【精神抵抗力判定" + &name + "】\n";
+        text = text + "2d+{生命抵抗力} 【生命抵抗力判定" + &name + "】\n";
+        text = text + "\n";
+        text = text + "C({" + &hp + "}-()+{" + &defense + "}) 【残HP" + &name + " 物理ダメージ】\n";
+        text = text + "C({" + &hp + "}-()) 【残HP" + &name + " 魔法ダメージ】\n";
+        text = text + "C({" + &hp + "}-()/2) 【残HP" + &name + " 魔法ダメージ半減】\n";
+        text = text + "C({" + &mp + "}-()) 【残MP" + &name + "】\n";
+        text
     }
 }
