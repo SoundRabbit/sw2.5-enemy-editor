@@ -268,7 +268,7 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
         Msg::WriteOutToUdonarium => {
             let mut idx = 0;
             for part in &state.enemy.parts {
-                if let Some(save_data) = state.enemy.to_udonarium_string(idx) {
+                if let Some(save_data) = state.enemy.to_udonarium_string_with_part(idx) {
                     let blob = web_sys::Blob::new_with_str_sequence_and_options(
                         &JsValue::from_serde(&[save_data]).unwrap(),
                         web_sys::BlobPropertyBag::new().type_("application/xml"),
