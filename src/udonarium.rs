@@ -62,7 +62,10 @@ impl Enemy {
                     Node::data_with_children(
                         "common",
                         vec![
-                            Node::data_with_value("name", &self.name),
+                            Node::data_with_value(
+                                "name",
+                                String::new() + &self.name + "(" + &part.name + ")",
+                            ),
                             Node::data_with_value("size", "1"),
                         ],
                     ),
