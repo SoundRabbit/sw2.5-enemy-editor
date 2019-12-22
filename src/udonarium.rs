@@ -46,6 +46,56 @@ impl Node {
 }
 
 impl Enemy {
+    pub fn to_udonarium_string(&self) -> String {
+        let mut character = Node::new("character");
+        character.add_attribute("location.name", "table");
+        character.add_attribute("location.x", "0");
+        character.add_attribute("location.y", "0");
+        character.add_attribute("posZ", "0");
+        character.add_attribute("rotate", "0");
+        character.add_attribute("roll", "0");
+
+        let mut resources = vec![];
+        let mut abilities = vec![];
+        let mut chat_text = String::new();
+        for part in &self.parts {
+            let resource = part.to_udonarium_resource_nodes(true);
+            let ability = part.to_udonarium_ability_nodes(true);
+            chat_text = chat_text + &part.to_udonarium_chat_pallet(true) + "\n";
+            for r in resource {
+                resources.push(r);
+            }
+            for a in ability {
+                abilities.push(a);
+            }
+        }
+
+        character.add_child(Node::data_with_children(
+            "character",
+            vec![
+                Node::data_with_children("image", vec![Node::data_as_image("")]),
+                Node::data_with_children(
+                    "common",
+                    vec![
+                        Node::data_with_value("name", &self.name),
+                        Node::data_with_value("size", "1"),
+                    ],
+                ),
+                Node::data_with_children(
+                    "detail",
+                    vec![
+                        Node::data_with_children("リソース", resources),
+                        Node::data_with_children("能力", abilities),
+                        self.to_udonarium_information_node(),
+                    ],
+                ),
+            ],
+        ));
+
+        character.add_child(Node::chat_palette(chat_text));
+
+        character.to_string()
+    }
     pub fn to_udonarium_string_with_part(&self, part: usize) -> Option<String> {
         if let Some(part) = self.parts.get(part) {
             let mut character = Node::new("character");
@@ -167,7 +217,7 @@ impl enemy::Part {
         let hp = String::new() + "HP" + &name;
         let mp = String::new() + "MP" + &name;
         if with_name {
-            text = text + "=====" + &self.name + "=====";
+            text = text + "==========" + &self.name + "==========\n";
         }
         text = text
             + "2d+{"

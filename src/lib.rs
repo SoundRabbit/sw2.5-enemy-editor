@@ -74,6 +74,7 @@ pub enum Msg {
     Save,
     Load(web_sys::File),
     WriteOutToUdonarium,
+    WriteOutToUdonariumByPart,
     WriteOutElementAsImage(web_sys::Element),
     PrintOut,
     NoOp,
@@ -266,6 +267,24 @@ fn update(state: &mut State, msg: Msg) -> Cmd<Msg, Sub> {
             on_load.forget();
         }),
         Msg::WriteOutToUdonarium => {
+            let save_data = state.enemy.to_udonarium_string();
+            let blob = web_sys::Blob::new_with_str_sequence_and_options(
+                &JsValue::from_serde(&[save_data]).unwrap(),
+                web_sys::BlobPropertyBag::new().type_("application/xml"),
+            )
+            .unwrap();
+            let url = web_sys::Url::create_object_url_with_blob(&blob).unwrap();
+            let document = web_sys::window().unwrap().document().unwrap();
+            let a = document.create_element("a").unwrap();
+            let _ = a.set_attribute("href", &url);
+            let _ = a.set_attribute("download", &(String::new() + &state.enemy.name + ".xml"));
+            let _ = a.set_attribute("style", "display: none");
+            let _ = document.body().unwrap().append_child(&a);
+            a.dyn_ref::<web_sys::HtmlElement>().unwrap().click();
+            let _ = document.body().unwrap().remove_child(&a);
+            Cmd::none()
+        }
+        Msg::WriteOutToUdonariumByPart => {
             let mut idx = 0;
             for part in &state.enemy.parts {
                 if let Some(save_data) = state.enemy.to_udonarium_string_with_part(idx) {

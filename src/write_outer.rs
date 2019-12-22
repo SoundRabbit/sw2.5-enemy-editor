@@ -11,8 +11,12 @@ pub fn render() -> Html<Msg> {
             .string("data-type", "write-outer"),
         Events::new(),
         vec![render_option(
-            "Udonarium用に書き出し",
+            "Udonarium用に書き出し/部位ごと",
             "Udonarium用のXMLファイルを書き出します。キャラクタは部位ごとに作成されます。",
+            || Msg::WriteOutToUdonariumByPart,
+        ), render_option(
+            "Udonarium用に書き出し/1キャラクタ",
+            "Udonarium用のXMLファイルを書き出します。全ての部位をまとめて1つのキャラクタを作成します。",
             || Msg::WriteOutToUdonarium,
         )],
     )

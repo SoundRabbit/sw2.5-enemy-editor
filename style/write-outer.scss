@@ -9,6 +9,7 @@
         grid-template-columns: 1fr;
         grid-auto-rows: max-content;
         justify-items: start;
+        margin-bottom: 2rem;
         & > span {
             padding-left: 1.5em;
         }
