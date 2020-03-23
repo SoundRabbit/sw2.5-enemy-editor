@@ -242,7 +242,7 @@ impl enemy::Part {
         text = text + "\n";
         text = text + "C({" + &hp + "}-()+{" + &defense + "}) 【残HP" + &name + " 物理ダメージ】\n";
         text = text + "C({" + &hp + "}-()) 【残HP" + &name + " 魔法ダメージ】\n";
-        text = text + "C({" + &hp + "}-()/2) 【残HP" + &name + " 魔法ダメージ半減】\n";
+        text = text + "{" + &hp + "}-()d1/2U 【残HP" + &name + " 魔法ダメージ半減】\n";
         text = text + "C({" + &mp + "}-()) 【残MP" + &name + "】\n";
         text
     }
