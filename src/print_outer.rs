@@ -199,7 +199,11 @@ fn render_special_ability(value: &String) -> Html<Msg> {
                 Events::new(),
                 vec![Html::text("特殊能力")],
             ),
-            Html::div(Attributes::new(), Events::new(), content),
+            Html::div(
+                Attributes::new().string("data-type", "special-ability-context"),
+                Events::new(),
+                content,
+            ),
         ],
     )
 }

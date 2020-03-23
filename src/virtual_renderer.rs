@@ -31,8 +31,6 @@ pub fn element_to_canvas(element: &web_sys::Element) -> web_sys::HtmlCanvasEleme
         &(client_rect.x(), client_rect.y()),
         &ratio,
         false,
-        &mut 0,
-        1,
     );
     canvas
 }
@@ -43,33 +41,11 @@ fn render_node_to_context(
     offset: &(f64, f64),
     ratio: &f64,
     bg_black: bool,
-    line_num: &mut usize,
-    column_count: usize,
 ) {
     if let Some(element) = node.dyn_ref::<web_sys::Element>() {
-        if element.tag_name() == "BR" {
-            *line_num += 1;
-        } else {
-            render_element_to_context(
-                element,
-                context,
-                offset,
-                ratio,
-                bg_black,
-                line_num,
-                column_count,
-            );
-        }
+        render_element_to_context(element, context, offset, ratio, bg_black);
     } else if let Some(text) = node.dyn_ref::<web_sys::Text>() {
-        render_text_to_context(
-            text,
-            context,
-            offset,
-            ratio,
-            bg_black,
-            line_num,
-            column_count,
-        );
+        render_text_to_context(text, context, offset, ratio, bg_black);
     }
 }
 
@@ -79,8 +55,6 @@ fn render_element_to_context(
     offset: &(f64, f64),
     ratio: &f64,
     mut bg_black: bool,
-    line_num: &mut usize,
-    mut column_count: usize,
 ) {
     let client_rect = element.get_bounding_client_rect();
     let x = (client_rect.x() - offset.0) * ratio;
@@ -114,25 +88,25 @@ fn render_element_to_context(
             bg_black = false;
         }
     }
-    if let Ok(cn) = computed_style.get_property_value("column-count") {
-        if let Ok(cn) = cn.parse() {
-            column_count = cn;
+    if let Ok(cn) = computed_style.get_property_value("data-type") {
+        if cn == "special-ability-context" {
+            if let Ok(seg) = JsValue::from_serde(&[10, 10]) {
+                context.set_line_dash(&seg);
+                context.set_line_width(0.5 * ratio);
+                context.move_to(x + w / 2.0, y);
+                context.line_to(x + w / 2.0, y + h);
+                context.stroke();
+                if let Ok(seg) = JsValue::from_serde(&[0, 0]) {
+                    context.set_line_dash(&seg);
+                }
+            }
         }
     }
     let children = element.child_nodes();
     let len = children.length();
-    *line_num = 0;
     for i in 0..len {
         if let Some(child) = children.item(i) {
-            render_node_to_context(
-                &child,
-                context,
-                offset,
-                ratio,
-                bg_black,
-                line_num,
-                column_count,
-            );
+            render_node_to_context(&child, context, offset, ratio, bg_black);
         }
     }
 }
@@ -143,18 +117,12 @@ fn render_text_to_context(
     offset: &(f64, f64),
     ratio: &f64,
     bg_black: bool,
-    line_num: &mut usize,
-    column_count: usize,
 ) {
     let client_rect = text.parent_element().unwrap().get_bounding_client_rect();
-    let h = client_rect.height() * ratio;
-    let w = client_rect.width() * ratio;
     let font_size = 4.0 / (25.4 / 300.0);
     let x = (client_rect.x() - offset.0) * ratio;
     let y = (client_rect.y() - offset.1) * ratio + font_size * 1.1;
     let font_style = font_size.to_string() + "px fot-tsukuardgothic-std";
-    let line_height = font_size * 2.0;
-    let offset_y = (line_height - font_size) / 2.0;
     if bg_black {
         context.set_fill_style(&JsValue::from("#FFF"));
     } else {
@@ -162,40 +130,5 @@ fn render_text_to_context(
     }
     context.set_font(&font_style);
     let text = text.data();
-    if column_count == 1 {
-        context.fill_text(&text, x, y + offset_y + (*line_num as f64) * line_height);
-    } else {
-        let mut alloced = String::new();
-        for c in text.chars() {
-            alloced.push(c);
-            let text_metrics = context.measure_text(&alloced).unwrap();
-            if text_metrics.width() > w / 2.0 - font_size / 2.0 {
-                if let Some(c) = alloced.pop() {
-                    let hh = line_height * (*line_num as f64);
-                    if hh + font_size + (line_height - font_size) / 2.0 < h {
-                        context.fill_text(&alloced, x, y + hh + offset_y);
-                    } else {
-                        let hh = hh - h;
-                        context.fill_text(
-                            &alloced,
-                            x + w / 2.0 + font_size / 2.0,
-                            y + hh + offset_y,
-                        );
-                    }
-                    alloced.clear();
-                    alloced.push(c);
-                    *line_num += 1;
-                }
-            }
-        }
-        if alloced.len() > 0 {
-            let hh = line_height * (*line_num as f64);
-            if hh + line_height < h {
-                context.fill_text(&alloced, x, y + hh + offset_y);
-            } else {
-                let hh = hh - h;
-                context.fill_text(&alloced, x + w / 2.0 + font_size / 2.0, y + hh + offset_y);
-            }
-        }
-    }
+    context.fill_text(&text, x, y);
 }
