@@ -179,7 +179,15 @@ fn render_special_ability(value: &String) -> Html<Msg> {
     let text: Vec<&str> = value.split('\n').collect();
     let mut content = Vec::new();
     for p in text {
-        content.push(Html::text(p));
+        for c in p.chars() {
+            let mut buf = String::from("");
+            buf.push(c);
+            content.push(Html::span(
+                Attributes::new(),
+                Events::new(),
+                vec![Html::text(buf)],
+            ));
+        }
         content.push(Html::br(Attributes::new(), Events::new(), vec![]));
     }
     Html::div(

@@ -82,7 +82,6 @@
             text-align: center;
         }
         &>div{
-            column-count: 2;
             column-rule: dotted;
         }
     }
@@ -92,7 +91,12 @@
     #content[data-type="print-outer"] {
         & #paper {
             width: 71vh;
+            // 16級
             font-size: 1.347vh;
+        }
+        & #special-ability > div {
+            column-width: 31.95vh;
+            padding-left: 0.33675vh;
         }
     }
 }
@@ -101,7 +105,11 @@
     #content[data-type="print-outer"] {
         & #paper {
             width: 100vw;
+            // 16級
             font-size: 1.9vw;
+        }
+        & #special-ability > div {
+            column-width: 45vw;
         }
     }
 }
@@ -110,7 +118,12 @@
     #content[data-type="print-outer"] {
         & #paper {
             width: 100vw;
+            // 16級
             font-size: 4mm;
+        }
+        & #special-ability > div {
+            column-width: 45vw;
+            padding-left:1mm;
         }
     }
 }
