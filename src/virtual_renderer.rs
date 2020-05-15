@@ -121,7 +121,7 @@ fn render_text_to_context(
     let client_rect = text.parent_element().unwrap().get_bounding_client_rect();
     let font_size = 4.0 / (25.4 / 300.0);
     let x = (client_rect.x() - offset.0) * ratio;
-    let y = (client_rect.y() - offset.1) * ratio + font_size * 1.1;
+    let y = (client_rect.y() - offset.1) * ratio + font_size;
     let font_style = font_size.to_string() + "px fot-tsukuardgothic-std";
     if bg_black {
         context.set_fill_style(&JsValue::from("#FFF"));

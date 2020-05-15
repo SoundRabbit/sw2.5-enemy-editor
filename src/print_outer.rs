@@ -65,9 +65,33 @@ fn render_title_bar(
         Attributes::new().id("title-bar"),
         Events::new(),
         vec![
-            Html::span(Attributes::new(), Events::new(), vec![Html::text(level)]),
-            Html::span(Attributes::new(), Events::new(), vec![Html::text(name)]),
-            Html::span(Attributes::new(), Events::new(), vec![Html::text(kind)]),
+            Html::span(
+                Attributes::new(),
+                Events::new(),
+                vec![Html::span(
+                    Attributes::new(),
+                    Events::new(),
+                    vec![Html::text(level)],
+                )],
+            ),
+            Html::span(
+                Attributes::new(),
+                Events::new(),
+                vec![Html::span(
+                    Attributes::new(),
+                    Events::new(),
+                    vec![Html::text(name)],
+                )],
+            ),
+            Html::span(
+                Attributes::new(),
+                Events::new(),
+                vec![Html::span(
+                    Attributes::new(),
+                    Events::new(),
+                    vec![Html::text(kind)],
+                )],
+            ),
         ],
     )
 }
@@ -167,12 +191,24 @@ fn render_part_prop_heading(value: impl Into<String>) -> Html<Msg> {
     Html::span(
         Attributes::new().class("heading"),
         Events::new(),
-        vec![Html::text(value)],
+        vec![Html::span(
+            Attributes::new(),
+            Events::new(),
+            vec![Html::text(value)],
+        )],
     )
 }
 
 fn render_part_prop(value: impl Into<String>) -> Html<Msg> {
-    Html::span(Attributes::new(), Events::new(), vec![Html::text(value)])
+    Html::span(
+        Attributes::new(),
+        Events::new(),
+        vec![Html::span(
+            Attributes::new(),
+            Events::new(),
+            vec![Html::text(value)],
+        )],
+    )
 }
 
 fn render_special_ability(value: &String) -> Html<Msg> {
@@ -197,7 +233,11 @@ fn render_special_ability(value: &String) -> Html<Msg> {
             Html::span(
                 Attributes::new(),
                 Events::new(),
-                vec![Html::text("特殊能力")],
+                vec![Html::span(
+                    Attributes::new(),
+                    Events::new(),
+                    vec![Html::text("特殊能力")],
+                )],
             ),
             Html::div(
                 Attributes::new().string("data-type", "special-ability-context"),
